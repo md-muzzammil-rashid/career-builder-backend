@@ -104,6 +104,7 @@ const uploadResumeDetails = AsyncHandler(async (req, res, next) => {
 })
 
 const getUserInfo = AsyncHandler(async (req, res, next)=>{
+    console.log('user info');
     const user = await UserModel.findById(req.user._id)
     if (!user) {
         throw new ApiError(404, "User not found")
