@@ -27,7 +27,7 @@ const UserSchema = new mongoose.Schema({
         lastName:{
             type: String
         },
-        Bio:{
+        about:{
             type: String
         },
         contact:{

@@ -117,7 +117,6 @@ const getUserInfo = AsyncHandler(async (req, res, next)=>{
 
 const changePassword = AsyncHandler(async (req, res, next)=>{
     const {oldPassword, newPassword} = req.body
-    console.log(oldPassword,newPassword);
     const user = await UserModel.findById(req.user._id)
     if(!await bcrypt.compare(oldPassword, user.password)){
         throw new ApiError(401, "Old password is incorrect")
@@ -128,6 +127,7 @@ const changePassword = AsyncHandler(async (req, res, next)=>{
     // if(!changedPassword) {
     //     throw new ApiError(501, "Failed to change password")
     // }
+    console.log('password changed');
     res.status(200)
         .json(
             new ApiResponse(200, "Password Changed Successfully", {})
@@ -137,17 +137,19 @@ const changePassword = AsyncHandler(async (req, res, next)=>{
 const updateAccountDetails = AsyncHandler(async (req, res, next)=>{
     let {userData} = req.body
     userData = JSON.parse(userData)
+    const user = await UserModel.findById(req.user.id)
     const isUserExist = await UserModel.findOne({email: userData.email})
-    if(isUserExist){
+    if(!isUserExist.equals(user._id) ){
         throw new ApiError(409, "User with same email already existed")
     }
-    const user = await UserModel.findByIdAndUpdate(req.user._id, {
-        'ProfileInfo.firstName': userData.firstName,
+
+    const updatedUser = await UserModel.findByIdAndUpdate(req.user._id, {
+        'profileInfo.firstName': userData.firstName,
         'profileInfo.lastName': userData.lastName,
-        email: userData.email,
+        'email': userData.email,
         'profileInfo.contact':userData.contact,
-        profession: userData.profession,
-        'profileInfo.bio': userData.about
+        'profileInfo.profession': userData.profession,
+        'profileInfo.about': userData.about
     })
 
     if(!user){
@@ -155,7 +157,7 @@ const updateAccountDetails = AsyncHandler(async (req, res, next)=>{
     }
     res.status(200)
     .json(
-        new ApiResponse(200, "Account Details Updated Successfully", user)
+        new ApiResponse(200, "Account Details Updated Successfully", updatedUser)
     )
 })
 
