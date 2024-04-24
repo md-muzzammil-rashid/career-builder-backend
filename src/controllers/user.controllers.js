@@ -82,7 +82,8 @@ const logoutUser = AsyncHandler(async (req, res, next) => {
 })
 
 const uploadResumeDetails = AsyncHandler(async (req, res, next) => {
-    let { resumeDetails } = req.body;
+    let { resumeDetails , resumeName} = req.body;
+    console.log(resumeName);
     if (!resumeDetails) {
         throw new ApiError(400, "Resume details are required")
     }
@@ -90,8 +91,9 @@ const uploadResumeDetails = AsyncHandler(async (req, res, next) => {
     resumeDetails = JSON.parse(resumeDetails)
 
     const user = await UserModel.findByIdAndUpdate(req.user._id,
-        { resumeDetails: resumeDetails }
+        { resumeDetails: resumeDetails, $push:{savedResume: {resumeDetails: resumeDetails, resumeName: resumeName}} }
     )
+
     console.log(resumeDetails);
     if (!user) {
         throw new ApiError(501, "Failed to upload resume details")
