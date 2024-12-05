@@ -2,6 +2,7 @@ import AsyncHandler from "../utils/AsyncHandler.js"
 import ApiError from '../utils/ApiError.js'
 import { UserModel } from "../models/user.model.js"
 import ApiResponse from "../utils/ApiResponse.js"
+import {} from 'axios'
 import bcrypt from 'bcrypt'
 
 const createUser = AsyncHandler(async (req, res, next) => {
@@ -81,27 +82,11 @@ const logoutUser = AsyncHandler(async (req, res, next) => {
         )
 })
 
-const uploadResumeDetails = AsyncHandler(async (req, res, next) => {
-    let { resumeDetails , resumeName} = req.body;
-    console.log(resumeName);
-    if (!resumeDetails) {
-        throw new ApiError(400, "Resume details are required")
-    }
-  
-    resumeDetails = JSON.parse(resumeDetails)
+const uploadUserDetails = AsyncHandler(async (req, res, next) => {
+    
+    const updateUserDetails = await UserModel.findByIdAndUpdate(req.user._id, req.body, {new: true}).select('-password').lean();
 
-    const user = await UserModel.findByIdAndUpdate(req.user._id,
-        { resumeDetails: resumeDetails, $push:{savedResume: {resumeDetails: resumeDetails, resumeName: resumeName}} }
-    )
-
-    console.log(resumeDetails);
-    if (!user) {
-        throw new ApiError(501, "Failed to upload resume details")
-    }
-    return res.status(200)
-        .json(
-            new ApiResponse(200, "Resume Details Uploaded Successfully", user)
-        )
+    return res.status(httpStatusCode)
 
 })
 
@@ -167,7 +152,7 @@ export {
     createUser,
     userLogin,
     logoutUser,
-    uploadResumeDetails,
+    uploadUserDetails,
     getUserInfo,
     changePassword,
     updateAccountDetails

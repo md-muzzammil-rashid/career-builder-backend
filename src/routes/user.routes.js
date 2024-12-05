@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { changePassword, createUser, getUserInfo, logoutUser, updateAccountDetails, uploadResumeDetails, userLogin } from "../controllers/user.controllers.js";
+import { changePassword, createUser, getUserInfo, logoutUser, updateAccountDetails, uploadUserDetails, userLogin } from "../controllers/user.controllers.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 
 const router = Router()
@@ -13,7 +13,7 @@ router.route('/signout')
       .post(verifyJWT, logoutUser)
 
 router.route('/upload-details')
-      .post(verifyJWT, uploadResumeDetails)
+      .post(verifyJWT, uploadUserDetails)
 
 router.route('/get-user-info')
       .get(verifyJWT, getUserInfo)

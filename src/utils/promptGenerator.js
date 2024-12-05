@@ -220,8 +220,57 @@ const generatePromptForGeneratePortfolioWithResume = (
     return prompt.trim();
   };
   
+const generatePromptForAnalyzingResume = (parsedResume) => {
+    const prompt = `
+    You are tasked with analyzing a parsed resume and providing a detailed analysis in JSON format. Use the provided \`parsedResume\` data to evaluate the resume and generate a response based on the following schema. 
+  
+    Ensure:
+    1. **Schema Compliance**: The output must strictly adhere to the provided schema.
+    2. **Detailed Analysis**:
+       - Provide a **score** for the overall quality of the resume on a scale of 0-100.
+       - Identify **key suggestions** for improvement.
+       - Highlight **areas for improvement** in terms of structure, content, and clarity.
+       - Detect and list **grammar errors** in the text.
+       - Identify **repetitive words** that could be rephrased or removed.
+       - Offer **general improvement suggestions** for making the resume stand out.
+       - For each section (e.g., Education, Experience, Skills), give:
+         - **Score** for that section on a scale of 0-100.
+         - **Feedback** specific to the section.
+         - **Key improvements** tailored for the section.
+  
+    3. **Output Requirement**: 
+       - Return only the resulting JSON object.
+       - No additional text, commentary, or explanation should be included in the output.
+  
+    Resume Analysis Schema:
+    {
+      "score": { "type": "Number", "required": true },
+      "keySuggestions": { "type": ["String"], "required": true },
+      "areasForImprovement": { "type": ["String"], "required": true },
+      "grammarErrors": { "type": ["String"], "required": true },
+      "repetitiveWords": { "type": ["String"], "required": true },
+      "improvementSuggestions": { "type": ["String"], "required": true },
+      "sectionFeedback": [
+        {
+          "section": { "type": "String", "required": true },
+          "score": { "type": "Number", "required": true },
+          "feedback": { "type": "String", "required": true },
+          "keyImprovements": { "type": ["String"], "required": true }
+        }
+      ]
+    }
+  
+    Input Data:
+    - \`parsedResume\`: ${parsedResume}
+  
+    Perform a detailed analysis of the resume based on this schema and output **only** the JSON object as per the requirements. No additional text, explanations, or commentary should be included.
+    `;
+    return prompt.trim();
+  }
+  
 
   export {
     generatePromptForGeneratePortfolioWithUserDataAndResume,
-    generatePromptForGeneratePortfolioWithResume
+    generatePromptForGeneratePortfolioWithResume,
+    generatePromptForAnalyzingResume
   }

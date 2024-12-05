@@ -102,10 +102,27 @@ const getUserPortfolios = AsyncHandler(async (req, res, next)=> {
     return res.status(HttpStatusCode.Ok)
        .json(new ApiResponse(HttpStatusCode.Ok, "Portfolios Found", portfolios))
 })
+
+const updatePortfolio = AsyncHandler(async (req, res, next) => {
+    const {link} = req.params;
+    const normalizedLink = link.toLowerCase();
+
+    const dataToUpdate= Object.fromEntries(
+        Object.entries(req.body).filter(([key]) => !['_id', 'link'].includes(key))
+      );
+    const portfolio = await portfolioModel.findOneAndUpdate({link: normalizedLink, user: req.user._id}, dataToUpdate, {new: true}).select('-user');
+    if(!portfolio) {
+        return res.status(HttpStatusCode.NotFound)
+           .json(new ApiResponse(HttpStatusCode.NotFound, "Portfolio Not Found"))
+    }
+    return res.status(HttpStatusCode.Ok)
+       .json(new ApiResponse(HttpStatusCode.Ok, "Portfolio Updated", portfolio))
+})
 export {
     generatePortfolio,
     isLinkAvailable,
     getPortfolio,
     deletePortfolio,
-    getUserPortfolios
+    getUserPortfolios,
+    updatePortfolio
 }
