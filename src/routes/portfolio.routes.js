@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
-import { deletePortfolio, generatePortfolio, getPortfolio, getUserPortfolios, isLinkAvailable, updatePortfolio } from "../controllers/portfolio.controllers.js";
+import { changeUrl, deletePortfolio, generatePortfolio, getAuthorizedPortfolio, getPortfolio, getUserPortfolios, isLinkAvailable, updatePortfolio, sendMail } from "../controllers/portfolio.controllers.js";
 import { memoryUpload } from '../middlewares/multer.middleware.js'
 const router = Router();
 
@@ -20,5 +20,14 @@ router.route('/:link')
     .delete(verifyJWT, deletePortfolio)
 
 router.route('/:link')
-    .patch(verifyJWT, updatePortfolio)
+    .put(verifyJWT, updatePortfolio)
+
+router.route('/get-authorized-portfolio/:link')
+    .get(verifyJWT, getAuthorizedPortfolio)
+
+router.route('/change-url')
+    .patch(verifyJWT, changeUrl)
+
+router.route('/send-mail/:link')
+    .post(sendMail)
 export default router

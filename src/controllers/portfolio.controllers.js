@@ -6,6 +6,8 @@ import {  generatePortfolioContentWithUserDataAndResume } from '../utils/openAi.
 import { parsePDFBuffer, parsePDFLink } from '../utils/pdfParser.js'
 import { uploadOnCloudinary } from '../utils/Cloudinary.js'
 import { generatePortfolioContentWithResume } from '../utils/googleAi.js'
+import { UserModel } from "../models/user.model.js";
+import { mailSender } from "../utils/nodeMailer.js";
 
 const generatePortfolio = AsyncHandler(async (req, res, next)=> {
     const {url, useProfileData} = req.body; 
@@ -75,6 +77,24 @@ const getPortfolio = AsyncHandler(async (req, res, next) => {
        .json(new ApiResponse(HttpStatusCode.Ok, "Portfolio Found", portfolio))
 })
 
+const getAuthorizedPortfolio = AsyncHandler(async (req, res, next) => {
+    const {link} = req.params;
+    const normalizedLink = link.toLowerCase();
+    const portfolio = await portfolioModel.findOne({link: normalizedLink})
+
+    if(!portfolio){
+        return res.status(HttpStatusCode.NotFound)
+           .json(new ApiResponse(HttpStatusCode.NotFound, "Portfolio Not Found"))
+    }
+
+    if(portfolio.user.toString()!== req.user._id.toString()){
+        return res.status(HttpStatusCode.Ok)
+       .json(new ApiResponse(HttpStatusCode.Unauthorized, "Unauthorized to Access This Portfolio"))
+    }
+    return res.status(HttpStatusCode.Ok)
+       .json(new ApiResponse(HttpStatusCode.Ok, "Portfolio Found", portfolio))
+})
+
 const deletePortfolio = AsyncHandler(async (req, res, next) => {
     const {link} = req.params;
     const normalizedLink = link.toLowerCase();
@@ -119,11 +139,62 @@ const updatePortfolio = AsyncHandler(async (req, res, next) => {
     return res.status(HttpStatusCode.Ok)
        .json(new ApiResponse(HttpStatusCode.Ok, "Portfolio Updated", portfolio))
 })
+
+const changeUrl = AsyncHandler(async (req, res, next)=> {
+    const {oldLink, newLink} = req.body;
+    const normalizedLink = oldLink.toLowerCase();
+    const newNormalizedLink = newLink.toLowerCase();
+    const portfolio = await portfolioModel.findOne({link:normalizedLink})
+    if(!portfolio) {
+        return res.status(HttpStatusCode.Ok)
+           .json(new ApiResponse(HttpStatusCode.NotFound, "Portfolio Not Found"))
+    }
+    if(portfolio.user.toString()!==req.user._id.toString()){
+        return res.status(HttpStatusCode.Ok)
+        .json(new ApiResponse(HttpStatusCode.Unauthorized, "Unauthorized to Update This Portfolio URL"))
+    }
+    const isLinkAlreadyOccupied = await portfolioModel.findOne({link:newNormalizedLink})
+    if(isLinkAlreadyOccupied){
+        return res.status(HttpStatusCode.Ok)
+           .json(new ApiResponse(HttpStatusCode.Conflict, "New Link Already Occupied"))
+    }
+
+    portfolio.link = newNormalizedLink;
+    await portfolio.save();
+    return res.status(HttpStatusCode.Ok)
+       .json(new ApiResponse(HttpStatusCode.Ok, "Portfolio URL Updated", portfolio))
+})
+
+const sendMail = AsyncHandler(async (req, res, next) => {
+    const {email, subject, message, name} = req.body;
+    const {link} = req.params;
+    const normalizedLink = link.toLowerCase();
+    const user = await portfolioModel.findOne({link: normalizedLink})
+    if(!user) {
+        return res.status(HttpStatusCode.NotFound)
+           .json(new ApiResponse(HttpStatusCode.NotFound, "Portfolio Not Found"))
+    }
+    const receiverEmail = user.personalInfo.email
+    if(!receiverEmail || !receiverEmail.trim().toLowerCase()){
+        return res.status(HttpStatusCode.Ok)
+           .json(new ApiResponse(HttpStatusCode.BadRequest, "User not able to accept email"))
+    }
+    const send = await mailSender(email, receiverEmail.trim().toLowerCase(), name, subject, message );
+    if(!send){
+        return res.status(HttpStatusCode.InternalServerError)
+           .json(new ApiResponse(HttpStatusCode.InternalServerError, "Failed to send email"))
+    }
+    return res.status(HttpStatusCode.Ok)
+     .json(new ApiResponse(HttpStatusCode.Ok, "Email sent successfully"))
+})
 export {
     generatePortfolio,
     isLinkAvailable,
     getPortfolio,
     deletePortfolio,
     getUserPortfolios,
-    updatePortfolio
+    updatePortfolio,
+    getAuthorizedPortfolio,
+    changeUrl,
+    sendMail
 }
