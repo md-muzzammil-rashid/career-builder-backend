@@ -3,111 +3,154 @@ const generatePromptForGeneratePortfolioWithUserDataAndResume = (
   userData
 ) => {
   const prompt = `
-        You are tasked with generating JSON data for a portfolio web application. Utilize the provided \`userData\` and \`parsedResume\` content to populate the following schema. Ensure that: 
-      
-        1. **Data Deduplication**: Merge information from \`userData\` and \`parsedResume\`, giving priority to \`userData\` in case of conflicts. Remove duplicate entries in lists (e.g., job profiles, skills, education, experience).
-      
-        2. **JSON Structure Compliance**: The output JSON must adhere strictly to the provided portfolio schema below.
-      
-        3. **Data Parsing and Mapping**: Map relevant fields from \`parsedResume\` to corresponding schema properties, ensuring consistency. For example:
-           - Extract email, phone, and location from \`parsedResume\` if not provided in \`userData\`.
-           - Map experience, projects, and education details accurately.
-      
-        4. **Social Links**: Populate \`socialLinks\` from \`userData\` if available. If absent, infer links from \`parsedResume\` based on typical keywords (e.g., LinkedIn, GitHub).
-      
-        5. **Skills Categorization**: Classify skills into \`technicalSkills\` and \`softSkills\` based on context. Include relevant \`emoji\` fields using defaults where unavailable.
-      
-        6. **Comprehensive Information**: Populate all fields in the schema as much as possible from the provided data.
+Portfolio Generation Expert Instruction Set
 
-        7. **Job Profiles and Major Job Profile**: Use the \`parsedResume\` and \`userData\` to find the job profiles and major job profile based on Experience and Projects.
+Core Objective:
+Craft a comprehensive, compelling portfolio representation that transforms raw professional data into a strategic, engaging narrative showcasing the professional's unique value proposition.
 
-        8. **Project Description**: Utilize project details from both \`userData\` and \`parsedResume\` and generate descriptions in three points, in first point mention the Objective or Purpose of the Project, in second point mention the responsibilities and role and in third point mention the key features and mention the technology used in the project.
-      
+Detailed Generation Guidelines:
 
-        9. **Strict Output Requirement**: Return only the resulting JSON object. No additional text, explanations, or commentary should be included in the output.
-      
-        Portfolio Schema:
-        {
-            "user": {
-                "type": "mongoose.Schema.Types.ObjectId",
-                "ref": "User"
-            },
-            "link": {
-                "type": "String",
-                "required": true
-            },
-            "socialLinks": {
-                "linkedin": { "type": "String" },
-                "twitter": { "type": "String" },
-                "dev": { "type": "String" },
-                "mediam": { "type": "String" },
-                "instagram": { "type": "String" },
-                "github": { "type": "String" },
-                "leetcode": { "type": "String" },
-                "gmail": { "type": "String" },
-                "youtube": { "type": "String" }
-            },
-            "personalInfo": {
-                "profilePhoto": { "type": "String" },
-                "jobProfiles": [{ "type": "String" }],
-                "userSummery": { "type": "String" },
-                "majorJobProfile": { "type": "String" },
-                "email": { "type": "String" },
-                "phone": { "type": "String" },
-                "location": { "type": "String" },
-                "gDriveResumeLink": { "type": "String" },
-                "gender": { "type": "String" },
-                "firstName": { "type": "String" },
-                "lastName": { "type": "String" }
-            },
-            "skills": {
-                "technicalSkills": [{
-                    "label": { "type": "String" },
-                    "emoji": { "type": "String" },
-                }],
-                "softSkills": [{
-                    "label": { "type": "String" },
-                    "emoji": { "type": "String" }
-                }]
-            },
-            "education": [{
-                "instituteName": { "type": "String" },
-                "location": { "type": "String" },
-                "startDate": { "type": "String" },
-                "endDate": { "type": "String" },
-                "degree": { "type": "String" },
-                "specialization": { "type": "String" },
-                "imageUrl": { "type": "String" }
-            }],
-            "experience": [{
-                "jobRole": { "type": "String" },
-                "companyName": { "type": "String" },
-                "startDate": { "type": "String" },
-                "endDate": { "type": "String" },
-                "responsibilities": [{ "type": "String" }],
-                "location": { "type": "String" }
-            }],
-            "projects": [{
-                "title": { "type": "String" },
-                "liveURL": { "type": "String" },
-                "githubLink": { "type": "String" },
-                "techStack": [{
-                    "title": { "type": "String" },
-                    "emoji": { "type": "String" }
-                }],
-                "description": [{ "type": "String" }],
-                "startDate": { "type": "String" },
-                "endDate": { "type": "String" },
-                "imageUrl": [{ "type": "String" }]
-            }]
-        }
-      
-        Input Data:
-        - \`userData\`: ${userData}
-        - \`parsedResume\`: ${parsedResume}
-      
-        Generate the JSON object for the portfolio using the above schema, ensuring the data is accurate, complete, and deduplicated. Output **only** the JSON object, without any additional text or explanation. Only and only JSON
-        `;
+1. Data Integration Strategy:
+- Implement advanced data merging techniques
+- Prioritize userData over parsedResume
+- Eliminate redundancies while preserving unique information
+- Ensure maximum information capture with minimal duplication
+
+2. Personal Branding Components:
+
+A. Personal Information Optimization:
+- Craft a compelling professional summary that encapsulates core professional identity
+- Highlight career trajectory and unique professional value
+- Ensure consistent, professional formatting of contact details
+- Strategically select professional profile photo (if available)
+
+B. Social Links Enhancement:
+- Validate and standardize social media profile URLs
+- Infer missing links using professional context clues
+- Prioritize professional networking platforms
+- Ensure link integrity and relevance
+
+3. Skills Categorization Framework:
+- Implement sophisticated skill classification
+- Distinguish between technical and soft skills
+- Assign contextually relevant emojis
+- Group skills by proficiency and industry relevance
+- Ensure comprehensive skill representation
+
+4. Experience Narrative Construction:
+- Transform job experiences into strategic career progression stories
+- Use STAR (Situation, Task, Action, Result) methodology to describe contributions
+- Quantify achievements with specific metrics and percentages where possible
+- Highlight key achievements using quantifiable metrics
+- Emphasize leadership, innovation, and impact
+- Structure responsibilities to demonstrate professional growth
+- Use action-oriented, results-driven language
+
+5. Project Showcase Strategy:
+Detailed Project Description Generation:
+- First Point: Project Objective/Purpose
+  * Clearly articulate project's strategic context
+  * Explain problem statement or innovation driver
+- Second Point: Responsibilities and Role
+  * Describe specific contributions
+  * Highlight individual impact and leadership
+- Third Point: Technical Achievements
+  * List key features and technical innovations
+  * Specify technologies and tools utilized
+  * Quantify project outcomes
+
+6. Education Representation:
+- Showcase academic journey strategically
+- Highlight relevant coursework, achievements
+- Include specialized certifications
+- Demonstrate continuous learning commitment
+
+7. ATS and Digital Portfolio Optimization:
+- Ensure keyword-rich content
+- Maintain clean, professional formatting
+- Maximize discoverability across platforms
+- Create content that resonates with target professional opportunities
+
+Strict Output Requirements:
+- Generate JSON strictly adhering to the provided schema
+- Prioritize accuracy, completeness, and strategic presentation
+- Output ONLY the JSON object
+- No additional text or explanations
+
+Portfolio Schema Reference:
+{
+    "socialLinks": {
+        "linkedin": { "type": "String" },
+        "twitter": { "type": "String" },
+        "dev": { "type": "String" },
+        "mediam": { "type": "String" },
+        "instagram": { "type": "String" },
+        "github": { "type": "String" },
+        "leetcode": { "type": "String" },
+        "gmail": { "type": "String" },
+        "youtube": { "type": "String" }
+    },
+    "personalInfo": {
+        "profilePhoto": { "type": "String" },
+        "jobProfiles": [{ "type": "String" }],
+        "userSummery": { "type": "String" },
+        "majorJobProfile": { "type": "String" },
+        "email": { "type": "String" },
+        "phone": { "type": "String" },
+        "location": { "type": "String" },
+        "gDriveResumeLink": { "type": "String" },
+        "gender": { "type": "String" },
+        "firstName": { "type": "String" },
+        "lastName": { "type": "String" }
+    },
+    "skills": {
+        "technicalSkills": [{
+            "label": { "type": "String" },
+            "emoji": { "type": "String" },
+        }],
+        "softSkills": [{
+            "label": { "type": "String" },
+            "emoji": { "type": "String" }
+        }]
+    },
+    "education": [{
+        "instituteName": { "type": "String" },
+        "location": { "type": "String" },
+        "startDate": { "type": "String" },
+        "endDate": { "type": "String" },
+        "degree": { "type": "String" },
+        "specialization": { "type": "String" },
+        "imageUrl": { "type": "String" }
+    }],
+    "experience": [{
+        "jobRole": { "type": "String" },
+        "companyName": { "type": "String" },
+        "startDate": { "type": "String" },
+        "endDate": { "type": "String" },
+        "responsibilities": [{ "type": "String" }],
+        "location": { "type": "String" }
+    }],
+    "projects": [{
+        "title": { "type": "String" },
+        "liveURL": { "type": "String" },
+        "githubLink": { "type": "String" },
+        "techStack": [{
+            "title": { "type": "String" },
+            "emoji": { "type": "String" }
+        }],
+        "description": [{ "type": "String" }],
+        "startDate": { "type": "String" },
+        "endDate": { "type": "String" },
+        "imageUrl": [{ "type": "String" }]
+    }]
+}
+
+Input Context:
+- \`userData\`: ${userData}
+- \`parsedResume\`: ${parsedResume}
+
+Final Instruction: Generate a JSON portfolio representation that transforms professional data into a compelling, strategic narrative. Output ONLY the JSON object.
+`;
   return prompt.trim();
 };
 
@@ -115,108 +158,161 @@ const generatePromptForGeneratePortfolioWithResume = (
     parsedResume
   ) => {
     const prompt = `
-          You are tasked with generating JSON data for a portfolio web application. Utilize the provided \`parsedResume\` content to populate the following schema. Ensure that: 
-        
-          1. **JSON Structure Compliance**: The output JSON must adhere strictly to the provided portfolio schema below.
-        
-          2. **Data Parsing and Mapping**: Map relevant fields from \`parsedResume\` to corresponding schema properties, ensuring consistency. For example:
-             - Extract email, phone, and location from \`parsedResume\` if not provided in \`userData\`.
-             - Map experience, projects, and education details accurately.
-        
-          4. **Social Links**: Populate \`socialLinks\` from \`parsedResume\` if available. 
-        
-          5. **Skills Categorization**: Classify skills into \`technicalSkills\` and \`softSkills\` based on context. Include relevant \`emoji\` fields using defaults where unavailable.
-        
-          6. **Comprehensive Information**: Populate all fields in the schema as much as possible from the provided data.
-  
-          7. **Job Profiles and Major Job Profile**: Use the \`parsedResume\` to find the job profiles and major job profile based on Experience and Projects.
-  
-          8. **Project Description**: Utilize project details from \`parsedResume\` and generate descriptions in three points, in first point mention the Objective or Purpose of the Project, in second point mention the responsibilities and role and in third point mention the key features and mention the technology used in the project.
-        
-  
-          9. **Strict Output Requirement**: Return only the resulting JSON object. No additional text, explanations, or commentary should be included in the output.
-        
-          Portfolio Schema:
-          {
-              "user": {
-                  "type": "mongoose.Schema.Types.ObjectId",
-                  "ref": "User"
-              },
-              "link": {
-                  "type": "String",
-                  "required": true
-              },
-              "socialLinks": {
-                  "linkedin": { "type": "String" },
-                  "twitter": { "type": "String" },
-                  "dev": { "type": "String" },
-                  "mediam": { "type": "String" },
-                  "instagram": { "type": "String" },
-                  "github": { "type": "String" },
-                  "leetcode": { "type": "String" },
-                  "gmail": { "type": "String" },
-                  "youtube": { "type": "String" }
-              },
-              "personalInfo": {
-                  "profilePhoto": { "type": "String" },
-                  "jobProfiles": [{ "type": "String" }],
-                  "userSummery": { "type": "String" },
-                  "majorJobProfile": { "type": "String" },
-                  "email": { "type": "String" },
-                  "phone": { "type": "String" },
-                  "location": { "type": "String" },
-                  "gDriveResumeLink": { "type": "String" },
-                  "gender": { "type": "String" },
-                  "firstName": { "type": "String" },
-                  "lastName": { "type": "String" }
-              },
-              "skills": {
-                  "technicalSkills": [{
-                      "label": { "type": "String" },
-                      "emoji": { "type": "String" },
-                  }],
-                  "softSkills": [{
-                      "label": { "type": "String" },
-                      "emoji": { "type": "String" }
-                  }]
-              },
-              "education": [{
-                  "instituteName": { "type": "String" },
-                  "location": { "type": "String" },
-                  "startDate": { "type": "String" },
-                  "endDate": { "type": "String" },
-                  "degree": { "type": "String" },
-                  "specialization": { "type": "String" },
-                  "imageUrl": { "type": "String" }
-              }],
-              "experience": [{
-                  "jobRole": { "type": "String" },
-                  "companyName": { "type": "String" },
-                  "startDate": { "type": "String" },
-                  "endDate": { "type": "String" },
-                  "responsibilities": [{ "type": "String" }],
-                  "location": { "type": "String" }
-              }],
-              "projects": [{
-                  "title": { "type": "String" },
-                  "liveURL": { "type": "String" },
-                  "githubLink": { "type": "String" },
-                  "techStack": [{
-                      "title": { "type": "String" },
-                      "emoji": { "type": "String" }
-                  }],
-                  "description": [{ "type": "String" }],
-                  "startDate": { "type": "String" },
-                  "endDate": { "type": "String" },
-                  "imageUrl": [{ "type": "String" }]
-              }]
-          }
-        
-          Input Data:
-          - \`parsedResume\`: ${parsedResume}
-        
-          Generate the JSON object for the portfolio using the above schema, ensuring the data is accurate, complete, and deduplicated. Output **only** the JSON object, without any additional text or explanation. Only and only JSON
-          `;
+    Portfolio Generation Expert Instruction Set
+    
+    Core Objective:
+    Craft a comprehensive, compelling portfolio representation that transforms raw professional data into a strategic, engaging narrative showcasing the professional's unique value proposition.
+    
+    Detailed Generation Guidelines:
+    
+    1. Data Integration Strategy:
+    - Implement advanced data merging techniques
+    - Prioritize userData over parsedResume
+    - Eliminate redundancies while preserving unique information
+    - Ensure maximum information capture with minimal duplication
+    
+    2. Personal Branding Components:
+    
+    A. Personal Information Optimization:
+    - Craft a compelling professional summary that encapsulates core professional identity
+    - Highlight career trajectory and unique professional value
+    - Ensure consistent, professional formatting of contact details
+    - Strategically select professional profile photo (if available)
+    
+    B. Social Links Enhancement:
+    - Validate and standardize social media profile URLs
+    - Infer missing links using professional context clues
+    - Prioritize professional networking platforms
+    - Ensure link integrity and relevance
+    
+    3. Skills Categorization Framework:
+    - Implement sophisticated skill classification
+    - Distinguish between technical and soft skills
+    - Assign contextually relevant emojis
+    - Group skills by proficiency and industry relevance
+    - Ensure comprehensive skill representation
+    
+    4. Experience Narrative Construction:
+    - Transform job experiences into strategic career progression stories
+    - Use STAR (Situation, Task, Action, Result) methodology to describe contributions
+    - Quantify achievements with specific metrics and percentages where possible
+    - Highlight key achievements using quantifiable metrics
+    - Emphasize leadership, innovation, and impact
+    - Structure responsibilities to demonstrate professional growth
+    - Use action-oriented, results-driven language
+    
+    5. Project Showcase Strategy:
+    Detailed Project Description Generation:
+    - First Point: Project Objective/Purpose
+      * Clearly articulate project's strategic context
+      * Explain problem statement or innovation driver
+    - Second Point: Responsibilities and Role
+      * Describe specific contributions
+      * Highlight individual impact and leadership
+    - Third Point: Technical Achievements
+      * List key features and technical innovations
+      * Specify technologies and tools utilized
+      * Quantify project outcomes
+    
+    6. Education Representation:
+    - Showcase academic journey strategically
+    - Highlight relevant coursework, achievements
+    - Include specialized certifications
+    - Demonstrate continuous learning commitment
+    
+    7. ATS and Digital Portfolio Optimization:
+    - Ensure keyword-rich content
+    - Maintain clean, professional formatting
+    - Maximize discoverability across platforms
+    - Create content that resonates with target professional opportunities
+    
+    Strict Output Requirements:
+    - Generate JSON strictly adhering to the provided schema
+    - Prioritize accuracy, completeness, and strategic presentation
+    - Output ONLY the JSON object
+    - No additional text or explanations
+    
+    Portfolio Schema Reference:
+    {
+        "user": {
+            "type": "mongoose.Schema.Types.ObjectId",
+            "ref": "User"
+        },
+        "link": {
+            "type": "String",
+            "required": true
+        },
+        "socialLinks": {
+            "linkedin": { "type": "String" },
+            "twitter": { "type": "String" },
+            "dev": { "type": "String" },
+            "mediam": { "type": "String" },
+            "instagram": { "type": "String" },
+            "github": { "type": "String" },
+            "leetcode": { "type": "String" },
+            "gmail": { "type": "String" },
+            "youtube": { "type": "String" }
+        },
+        "personalInfo": {
+            "profilePhoto": { "type": "String" },
+            "jobProfiles": [{ "type": "String" }],
+            "userSummery": { "type": "String" },
+            "majorJobProfile": { "type": "String" },
+            "email": { "type": "String" },
+            "phone": { "type": "String" },
+            "location": { "type": "String" },
+            "gDriveResumeLink": { "type": "String" },
+            "gender": { "type": "String" },
+            "firstName": { "type": "String" },
+            "lastName": { "type": "String" }
+        },
+        "skills": {
+            "technicalSkills": [{
+                "label": { "type": "String" },
+                "emoji": { "type": "String" },
+            }],
+            "softSkills": [{
+                "label": { "type": "String" },
+                "emoji": { "type": "String" }
+            }]
+        },
+        "education": [{
+            "instituteName": { "type": "String" },
+            "location": { "type": "String" },
+            "startDate": { "type": "String" },
+            "endDate": { "type": "String" },
+            "degree": { "type": "String" },
+            "specialization": { "type": "String" },
+            "imageUrl": { "type": "String" }
+        }],
+        "experience": [{
+            "jobRole": { "type": "String" },
+            "companyName": { "type": "String" },
+            "startDate": { "type": "String" },
+            "endDate": { "type": "String" },
+            "responsibilities": [{ "type": "String" }],
+            "location": { "type": "String" }
+        }],
+        "projects": [{
+            "title": { "type": "String" },
+            "liveURL": { "type": "String" },
+            "githubLink": { "type": "String" },
+            "techStack": [{
+                "title": { "type": "String" },
+                "emoji": { "type": "String" }
+            }],
+            "description": [{ "type": "String" }],
+            "startDate": { "type": "String" },
+            "endDate": { "type": "String" },
+            "imageUrl": [{ "type": "String" }]
+        }]
+    }
+    
+    Input Context:
+    - \`parsedResume\`: ${parsedResume}
+    
+    Final Instruction: Generate a JSON portfolio representation that transforms professional data into a compelling, strategic narrative. Output ONLY the JSON object.
+    `;
     return prompt.trim();
   };
   
@@ -268,9 +364,186 @@ const generatePromptForAnalyzingResume = (parsedResume) => {
     return prompt.trim();
   }
   
+  const generateResumeWithAIPrompt = (userData) => {
+    const prompt = `
+    You are an expert resume writer and career strategist specializing in creating highly optimized, ATS-friendly resumes that effectively showcase professional achievements and potential.
+    
+
+      Resume Schema:
+  {
+   "profileInfo": {
+    "firstName": "String",
+    "lastName": "String",
+    "about": "String",
+    "phone": "String",
+    "email": "String",
+    "address": {
+      "city": "String",
+      "state": "String",
+      "country": "String"
+    },
+    "links": {
+      "linkedIn": "String",
+      "github": "String",
+      "portfolio": "String"
+    }
+  },
+  "experience": [
+    {
+      "employer": "String",
+      "jobTitle": "String",
+      "startDate": {
+        "month": "String",
+        "year": "String"
+      },
+      "endDate": {
+        "month": "String",
+        "year": "String"
+      },
+      "location": "String",
+      "contributions": [
+        {
+          "id": "String",
+          "text": "String"
+        }
+      ]
+    }
+  ],
+  "educations": [
+    {
+      "degree": "String",
+      "fieldOfStudy": "String",
+      "schoolName": "String",
+      "city": "String",
+      "startDate": {
+        "month": "String",
+        "year": "String"
+      },
+      "endDate": {
+        "month": "String",
+        "year": "String"
+      },
+      "grade": "String",
+      "marks": "String"
+    }
+  ],
+  "skills": {
+    "languages": ["String"],
+    "frameworks": ["String"],
+    "tools": ["String"],
+    "technologies": ["String"]
+  },
+  "projects": [
+    {
+      "title": "String",
+      "shortDescription": "String",
+      "liveLink": "String",
+      "githubLink": "String",
+      "projectDescription": [
+        {
+          "id": "String",
+          "text": "String"
+        }
+      ]
+    }
+  ],
+  "achievements": [
+    {
+      "achievementTitle": "String",
+      "achievementPoints": [
+        {
+          "id": "String",
+          "text": "String"
+        }
+      ]
+    }
+  ],
+  "certifications": [
+    {
+      "title": "String",
+      "certificationLink": "String",
+      "certificateDescription": "String"
+    }
+  ]
+  }
+
+    Your task is to transform the provided user profile data into a compelling, professionally crafted resume that:
+    - Maximizes ATS (Applicant Tracking System) compatibility
+    - Highlights key achievements using powerful, action-oriented language
+    - Demonstrates professional growth and impact
+    - Tailors content to the target industry and role
+    
+    Resume Generation Guidelines:
+    
+    1. Personal Details and Professional Summary:
+    - Craft a strategic professional summary that encapsulates the candidate's core professional value proposition
+    - Use industry-specific keywords that align with the user's target roles
+    - Ensure all contact information is professionally formatted
+    
+    2. Experience Section:
+    For each professional experience:
+    - Begin with a high-impact opening statement that frames the role's strategic importance
+    - Use STAR (Situation, Task, Action, Result) methodology to describe contributions
+    - Quantify achievements with specific metrics and percentages where possible
+    - Incorporate industry-specific keywords and technical skills
+    - Highlight responsibilities that demonstrate leadership, innovation, and problem-solving
+    - Structure descriptions to show progressive responsibility and career growth
+    
+    3. Project Descriptions:
+    For each project, create a comprehensive description with three critical components:
+    - Objective/Purpose: Clearly articulate the project's strategic goal and business/technical context
+    - Responsibilities and Role: Detailed explanation of the specific contributions, leadership, and individual impact
+    - Technical Achievements: 
+      * Highlight key features and technical innovations
+      * List specific technologies, frameworks, and tools used
+      * Quantify project outcomes (e.g., performance improvements, cost savings)
+    
+    4. Education Section:
+    - Emphasize relevant coursework, academic achievements, and skills
+    - Include academic projects, research, or notable accomplishments
+    - Highlight certifications, specialized training, or continuous learning efforts
+    
+    5. Skills Section:
+    - Create a comprehensive skills matrix that includes:
+      * Technical skills
+      * Soft skills
+      * Industry-specific competencies
+    - Organize skills by proficiency and relevance to target roles
+    - Use standard industry terminology and avoid jargon
+    
+    6. ATS Optimization Strategies:
+    - Use standard, clean formatting
+    - Incorporate relevant keywords from job descriptions
+    - Ensure consistent, professional formatting
+    - Avoid graphics, complex layouts, or non-standard fonts
+    
+    Input Constraints and Considerations:
+    - Leverage all available information in the user profile
+    - If information is sparse, use professional inference and standard industry practices
+    - Maintain authenticity while presenting the most compelling professional narrative
+    
+    Input Data:
+    \`userData\`: ${userData}
+    
+    Output Requirements:
+    - Produce a JSON object that matches the provided schema
+    - Ensure all generated content is professional, accurate, and reflective of the user's professional profile
+    - Focus on creating a narrative of professional growth and potential
+    
+    Final Instructions:
+    - Generate a resume that would pass ATS screening
+    - Create content that is both keyword-optimized and genuinely reflective of the professional's capabilities
+    - Prioritize clarity, impact, and strategic presentation of professional achievements
+    
+    Respond with ONLY the JSON resume object, formatted according to the specified schema.
+    `;
+      return prompt.trim();
+  }
+  
 
   export {
     generatePromptForGeneratePortfolioWithUserDataAndResume,
     generatePromptForGeneratePortfolioWithResume,
-    generatePromptForAnalyzingResume
+    generatePromptForAnalyzingResume,
+    generateResumeWithAIPrompt
   }
