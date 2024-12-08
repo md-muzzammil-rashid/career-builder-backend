@@ -20,6 +20,22 @@ app.use(
     express.urlencoded({extended:false})
 )
 
+// Handeling Error Globally
+app.use((err, req, res, next) => {
+    if (err instanceof ApiError) {
+        res.status(err.statusCode).json({
+            message: err.message,
+            error: err.error,
+            data: err.data
+        });
+    } else {
+        res.status(500).json({
+            message: 'Internal Server Error',
+            error: [],
+        });
+    }
+});
+
 //importing routes
 
 import UserRoutes from "./routes/user.routes.js"
