@@ -25,10 +25,11 @@ app.use(
 import UserRoutes from "./routes/user.routes.js"
 import PortfolioRoutes from "./routes/portfolio.routes.js"
 import ResumeRoutes from './routes/resume.routes.js'
+import AssetsRoutes from './routes/assets.routes.js'
 
 app.use('/api/v1/users', UserRoutes)
 app.use('/api/v1/resume', ResumeRoutes)
-
+app.use('/api/v1/assets', AssetsRoutes)
 app.use('/api/v1/portfolio', PortfolioRoutes)
 
 

@@ -75,7 +75,14 @@ softSkills:[{
     endDate:{type:String},
     imageUrl:[{type:String}]
    }],
-
+  template:{
+    type: String,
+    default: "Template Light 01",
+  },
+  isActive:{
+    type: Boolean,
+    default: true,
+  }
 })
 
 export default mongoose.model('PortfolioModel', portfolioSchema)

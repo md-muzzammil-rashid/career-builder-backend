@@ -119,9 +119,9 @@ const getUserPortfolios = AsyncHandler(async (req, res, next)=> {
     const portfolios = await portfolioModel.find({user: req.user._id})
     .select('-user')
     .lean()
-    const url = portfolios.map(portfolio => portfolio.link)
+    const portfoliosData = portfolios.map(portfolio => ({url:portfolio.link, isActive:portfolio.isActive, template:portfolio.template}))
     return res.status(HttpStatusCode.Ok)
-       .json(new ApiResponse(HttpStatusCode.Ok, "Portfolios Found", url))
+       .json(new ApiResponse(HttpStatusCode.Ok, "Portfolios Found", portfoliosData))
 })
 
 const updatePortfolio = AsyncHandler(async (req, res, next) => {
