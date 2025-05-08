@@ -174,208 +174,142 @@ export {
     profileCompletionStatus
 }
 
-function calculateProfileCompletion (user) {
-    // Weighting configuration
-    const MANDATORY_WEIGHT = 0.75;
-    const OPTIONAL_WEIGHT = 0.25;
-  
-    // Mandatory fields configuration
-    const mandatoryFields = [
-      { 
-        category: 'Personal Info', 
-        fields: [
-          { 
-            name: 'First Name', 
-            path: 'profileInfo.firstName', 
-            weight: 0.15,
-            href: '/profile/personal-info'
-          },
-          { 
-            name: 'Last Name', 
-            path: 'profileInfo.lastName', 
-            weight: 0.15,
-            href: '/profile/personal-info'
-          },
-          { 
-            name: 'Phone', 
-            path: 'profileInfo.phone', 
-            weight: 0.15,
-            href: '/profile/contact'
-          },
-          { 
-            name: 'Email', 
-            path: 'profileInfo.email', 
-            weight: 0.15,
-            href: '/profile/contact'
-          },
-          { 
-            name: 'LinkedIn', 
-            path: 'profileInfo.links.linkedIn', 
-            weight: 0.15,
-            href: '/profile/social-links'
-          }
-        ]
+function calculateProfileCompletion(user) {
+  // Weighting configuration
+  const MANDATORY_WEIGHT = 0.75;
+  const OPTIONAL_WEIGHT = 0.25;
+
+  // Mandatory fields configuration
+  const mandatoryFields = [
+      {
+          category: 'Personal Info',
+          fields: [
+              { name: 'First Name', path: 'profileInfo.firstName', weight: 0.15, href: '/profile/personal-info' },
+              { name: 'Last Name', path: 'profileInfo.lastName', weight: 0.15, href: '/profile/personal-info' },
+              { name: 'Phone', path: 'profileInfo.phone', weight: 0.15, href: '/profile/contact' },
+              { name: 'Email', path: 'profileInfo.email', weight: 0.15, href: '/profile/contact' },
+              { name: 'LinkedIn', path: 'profileInfo.links.linkedIn', weight: 0.15, href: '/profile/social-links' }
+          ]
       },
-      { 
-        category: 'Professional Details', 
-        fields: [
-          { 
-            name: 'Education', 
-            path: 'educations.length', 
-            weight: 0.125,
-            href: '/profile/education'
-          },
-          { 
-            name: 'Projects', 
-            path: 'projects.length', 
-            weight: 0.125,
-            href: '/profile/projects'
-          },
-          { 
-            name: 'Skills', 
-            path: 'skills', 
-            weight: 0.125,
-            href: '/profile/skills'
-          }
-        ]
+      {
+          category: 'Professional Details',
+          fields: [
+              { name: 'Education', path: 'educations.length', weight: 0.125, href: '/profile/education' },
+              { name: 'Projects', path: 'projects.length', weight: 0.125, href: '/profile/projects' },
+              { name: 'Skills', path: 'skills', weight: 0.125, href: '/profile/skills' }
+          ]
       }
-    ];
-  
-    // Optional fields configuration
-    const optionalFields = [
-      { 
-        category: 'Additional Personal Info', 
-        fields: [
-          { 
-            name: 'About', 
-            path: 'profileInfo.about', 
-            weight: 0.05,
-            href: '/profile/about'
-          },
-          { 
-            name: 'Profile Picture', 
-            path: 'profileInfo.profilePicture', 
-            weight: 0.05,
-            href: '/profile/photos'
-          },
-          { 
-            name: 'Address', 
-            path: 'profileInfo.address', 
-            weight: 0.05,
-            href: '/profile/address'
-          }
-        ]
+  ];
+
+  // Optional fields configuration
+  const optionalFields = [
+      {
+          category: 'Additional Personal Info',
+          fields: [
+              { name: 'About', path: 'profileInfo.about', weight: 0.05, href: '/profile/about' },
+              { name: 'Profile Picture', path: 'profileInfo.profilePicture', weight: 0.05, href: '/profile/photos' },
+              { name: 'Address', path: 'profileInfo.address', weight: 0.05, href: '/profile/address' }
+          ]
       },
-      { 
-        category: 'Professional Extras', 
-        fields: [
-          { 
-            name: 'Experience', 
-            path: 'experience.length', 
-            weight: 0.05,
-            href: '/profile/experience'
-          },
-          { 
-            name: 'Certifications', 
-            path: 'certifications.length', 
-            weight: 0.05,
-            href: '/profile/certifications'
-          },
-          { 
-            name: 'Achievements', 
-            path: 'achievements.length', 
-            weight: 0.05,
-            href: '/profile/achievements'
-          }
-        ]
+      {
+          category: 'Professional Extras',
+          fields: [
+              { name: 'Experience', path: 'experience.length', weight: 0.05, href: '/profile/experience' },
+              { name: 'Certifications', path: 'certifications.length', weight: 0.05, href: '/profile/certifications' },
+              { name: 'Achievements', path: 'achievements.length', weight: 0.05, href: '/profile/achievements' }
+          ]
       }
-    ];
-  
-    // Helper function to check field completion
-    const isFieldCompleted = (user, path) => {
-        const pathParts = path.split('.');
-        let value = user;
-        
-        for (let i = 0; i < pathParts.length; i++) {
+  ];
+
+  // Helper function to check field completion
+  const isFieldCompleted = (user, path) => {
+      const pathParts = path.split('.');
+      let value = user;
+
+      for (let i = 0; i < pathParts.length; i++) {
           const part = pathParts[i];
           if (value === undefined) return false;
           value = value[part];
-      
+
           // Special handling for last part of the path
           if (i === pathParts.length - 1) {
-            if (part === 'length') {
-              return value > 0;
-            }
-      
-            return value !== undefined && value !== null && value !== '';
+              if (part === 'length') {
+                  return value > 0;
+              }
+
+              return value !== undefined && value !== null && value !== '';
           }
-        }
-      
-        return false;
-      };
-  
-    // Calculate mandatory field completion
-    let mandatoryCompletion = 0;
-    const fieldsToComplete = [];
-  
-    mandatoryFields.forEach(category => {
+      }
+
+      return false;
+  };
+
+  // Calculate mandatory field completion
+  let mandatoryCompletion = 0;
+  const fieldsToComplete = [];
+
+  mandatoryFields.forEach(category => {
       const categoryFields = {
-        category: category.category,
-        fields: category.fields.map(field => {
-          const completed = isFieldCompleted(user, field.path);
-          if (!completed) {
-            mandatoryCompletion += field.weight;
-          }
-          return {
-            name: field.name,
-            completed,
-            href: field.href
-          };
-        })
+          category: category.category,
+          fields: category.fields.map(field => {
+              const completed = isFieldCompleted(user, field.path);
+              if (completed) {
+                  mandatoryCompletion += field.weight;
+              }
+              return {
+                  name: field.name,
+                  completed,
+                  href: field.href
+              };
+          })
       };
       fieldsToComplete.push(categoryFields);
-    });
-  
-    // Calculate optional field completion
-    let optionalCompletion = 0;
-    optionalFields.forEach(category => {
+  });
+
+  // Calculate optional field completion
+  let optionalCompletion = 0;
+  optionalFields.forEach(category => {
       const categoryFields = {
-        category: category.category,
-        fields: category.fields.map(field => {
-          const completed = isFieldCompleted(user, field.path);
-          if (completed) {
-            optionalCompletion += field.weight;
-          }
-          return {
-            name: field.name,
-            completed,
-            href: field.href
-          };
-        })
+          category: category.category,
+          fields: category.fields.map(field => {
+              const completed = isFieldCompleted(user, field.path);
+              if (completed) {
+                  optionalCompletion += field.weight;
+              }
+              return {
+                  name: field.name,
+                  completed,
+                  href: field.href
+              };
+          })
       };
       fieldsToComplete.push(categoryFields);
-    });
-  
-    // Calculate total percentage
-    const percentComplete = Math.min(
-      ((MANDATORY_WEIGHT * (MANDATORY_WEIGHT - mandatoryCompletion)) + 
-       (OPTIONAL_WEIGHT * optionalCompletion)) * 100, 
+  });
+
+  // Ensure weights are normalized
+  const mandatoryCompletionScore = mandatoryCompletion / MANDATORY_WEIGHT;
+  const optionalCompletionScore = optionalCompletion / OPTIONAL_WEIGHT;
+
+  // Calculate total percentage
+  const percentComplete = Math.min(
+      ((MANDATORY_WEIGHT * mandatoryCompletionScore) +
+       (OPTIONAL_WEIGHT * optionalCompletionScore)) * 100,
       100
-    );
-  
-    // Determine completion color
-    const getCompletionColor = (percent) => {
+  );
+
+  // Determine completion color
+  const getCompletionColor = (percent) => {
       if (percent < 20) return '#FF4136';  // Dark Red
       if (percent < 40) return '#FF851B';  // Orange
       if (percent < 60) return '#FFDC00';  // Yellow
       if (percent < 80) return '#2ECC40';  // Green
       return '#3D9970';  // Dark Green
-    };
-  
-    return {
+  };
+
+  return {
       percentComplete: Math.round(percentComplete),
-      mandatoryFieldsCompleted: mandatoryCompletion === 0,
+      mandatoryFieldsCompleted: mandatoryCompletionScore === 1,
       completionColor: getCompletionColor(percentComplete),
       fieldsToComplete
-    };
-  }
+  };
+}

@@ -539,6 +539,8 @@ const generatePromptForAnalyzingResume = (parsedResume) => {
     `;
       return prompt.trim();
   }
+
+  
   
 
   export {

@@ -36,18 +36,25 @@ app.use((err, req, res, next) => {
     }
 });
 
+app.get('/', (req, res)=>{
+    res.status(200).json({message: "server is running"})
+})
+
 //importing routes
 
 import UserRoutes from "./routes/user.routes.js"
 import PortfolioRoutes from "./routes/portfolio.routes.js"
 import ResumeRoutes from './routes/resume.routes.js'
 import AssetsRoutes from './routes/assets.routes.js'
+import courseRoutes from './routes/course.routes.js';
+import notesRoutes from './routes/notes.routes.js';
 
 app.use('/api/v1/users', UserRoutes)
 app.use('/api/v1/resume', ResumeRoutes)
 app.use('/api/v1/assets', AssetsRoutes)
 app.use('/api/v1/portfolio', PortfolioRoutes)
-
+app.use('/api/v1/courses', courseRoutes);
+app.use('/api/v1/notes', notesRoutes);
 
 
 export default app
